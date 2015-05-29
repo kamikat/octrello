@@ -1,23 +1,8 @@
-#!/usr/bin/env node
-
+var _ = require('lodash');
 var express = require('express');
-var bodyParser = require('body-parser');
-var app = express();
+var router = express.Router();
 
-app.use(bodyParser.json());
-app.use(function (req, res, next) {
-  console.log('%s - %s', req.method, req.url);
-  if (+req.body) {
-    console.log('----------------------------------');
-    console.log(JSON.stringify(req.body, null, '  '));
-  }
-  console.log();
-  return res.sendStatus(204);
-});
+// TODO routers
 
-var server = app.listen(process.env.PORT || 8033, function() {
-  var host = server.address().address;
-  var port = server.address().port;
-  console.log('Listening at %s:%s...\n', host, port);
-});
+module.exports = router;
 
