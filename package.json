@@ -1,0 +1,24 @@
+{
+  "name": "octrello",
+  "version": "1.0.0",
+  "description": "Integrate Trello to GitHub.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kirisetsz/octrello.git"
+  },
+  "keywords": [
+    "trello",
+    "github",
+    "webhook",
+    "workflow"
+  ],
+  "author": "kirisetsz <kirisetsz@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kirisetsz/octrello/issues"
+  }
+}
