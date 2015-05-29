@@ -17,7 +17,9 @@ var analyze = (function (symbols) {
       if (key == '_') {
         key = last_symbol;
       }
-      signals.push({ symbol: key, card: match[2] });
+      if (key) {
+        signals.push({ symbol: key, card: match[2] });
+      }
       last_symbol = key;
     }
     return signals;
