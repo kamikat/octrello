@@ -26,7 +26,7 @@ var analyze = (function (symbols) {
   };
 })({
   'mention': [ 'see' ],
-  'fulfill': [ 'completes?', 'fulfills?'],
+  'fulfill': [ 'completes?', 'fulfills?', 'implements?' ],
   '_': [ 'and', ', ?' ],
 });
 
@@ -34,43 +34,39 @@ router.use(require('./lib/trello-agent')());
 router.post('/label-card-in-board/:board', function (req, res, next) {
   var body = req.body;
   var board = req.params.board;
+  var label_success = req.query.label_success || 'green';
+  var trello = res.trello;
   _.each(body.commits, function (commit) {
     var actions = analyze(commit.message);
     var reverts = /^reverts?\b/i.test(commit.message);
     _.each(actions, function (act) {
       console.log(act);
-      switch (act.symbol) {
-        case 'mention': {
-          res
-          .trello.get('/boards/' + board + '/cards/' + act.card).end(function (err, res2) {
-            res
-            .trello.post('/cards/' + res2.body.id + '/actions/comments')
+      trello.get('/boards/' + board + '/cards/' + act.card).end(function (err, res) {
+        var card = res.body;
+        switch (act.symbol) {
+          case 'mention': {
+            trello.post('/cards/' + card.id + '/actions/comments')
             .send({ text: 'Mentioned at commit [' + commit.id + '](' + commit.url + ').\n>' + commit.message.split('\n').join('\n>') })
             .end(function (err, res) { console.log(err, res.body); });
-          });
-        } break;
-        case 'fulfill': {
-          res
-          .trello.get('/boards/' + board + '/cards/' + act.card).end(function (err, res2) {
+          } break;
+          case 'fulfill': {
+            var labels = _.pluck(card.labels, 'color');
             if (!reverts) {
-              res
-              .trello.post('/cards/' + res2.body.id + '/actions/comments')
-              .send({ text: 'Fulfilled by commit [' + commit.id + '](' + commit.url + ').\n>' + commit.message.split('\n').join('\n>') })
+              trello.post('/cards/' + card.id + '/actions/comments')
+              .send({ text: 'Fulfilled by commit [' + commit.id + '](' + commit.url + ').\n> ' + commit.message.split('\n').join('\n> ') })
               .end(function (err, res) { console.log(err, res.body); });
-              res
-              .trello.put('/cards/' + res2.body.id + '/labels')
-              .send({ value: _.uniq(res2.body.idLabels.concat([ body.label_success ])) })
+              trello.put('/cards/' + card.id + '/labels')
+              .send({ value: _.uniq(labels.concat([ label_success ])).join(',') })
               .end(function (err, res) { console.log(err, res.body); });
             } else {
-              res
-              .trello.put('/cards/' + res2.body.id + '/labels')
-              .send({ value: _.filter(res2.body.idLabels, function (v) { return v != body.label_success; }) })
+              trello.put('/cards/' + card.id + '/labels')
+              .send({ value: _.filter(labels, function (v) { return v != label_success; }).join(',') })
               .end(function (err, res) { console.log(err, res.body); });
             }
-          });
-          res
-        } break;
-      }
+            res
+          } break;
+        }
+      });
     });
   });
   return next();
