@@ -13,7 +13,7 @@ app.use(function (req, res, next) {
     console.log();
   } else {
   }
-  return res.send('\n');
+  return res.sendStatus(204);
 });
 
 var server = app.listen(process.env.PORT || 8033, function() {
