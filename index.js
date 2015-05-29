@@ -13,13 +13,14 @@ var analyze = (function (symbols) {
     var last_symbol;
     var signals = [];
     while (match = h.exec(message)) {
-      var key = _.findKey(c, function (exp) { return exp.test(match[0]); });
+      var key = _.findKey(c, function (exp) { return exp.test(match[1]); });
       if (key == '_') {
         key = last_symbol;
       }
-      signals.push({ symbol: key, card: match[1] });
+      signals.push({ symbol: key, card: match[2] });
       last_symbol = key;
     }
+    return signals;
   };
 })({
   'mention': [ 'see' ],
