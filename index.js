@@ -6,13 +6,12 @@ var app = express();
 
 app.use(bodyParser.json());
 app.use(function (req, res, next) {
-    console.log('%s - %s', req.method, req.url);
-  if (req.body) {
+  console.log('%s - %s', req.method, req.url);
+  if (+req.body) {
     console.log('----------------------------------');
     console.log(JSON.stringify(req.body, null, '  '));
-    console.log();
-  } else {
   }
+  console.log();
   return res.sendStatus(204);
 });
 
