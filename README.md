@@ -1,2 +1,4 @@
-# octrello
-Integrate Trello with GitHub.
+# Octrello
+
+Integrate (**not sync**) Trello to GitHub.
+
