@@ -51,7 +51,6 @@ router.all('/label-card-in-board/:board', function (req, res, next) {
           callback();
         } break;
       }
-
     });
 
   }, function (err) {
