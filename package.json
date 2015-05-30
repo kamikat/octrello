@@ -19,6 +19,7 @@
     "url": "https://github.com/kirisetsz/octrello/issues"
   },
   "dependencies": {
+    "async": "^1.0.0",
     "body-parser": "~1.12.4",
     "debug": "^2.2.0",
     "express": "~4.12.4",
