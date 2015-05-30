@@ -46,24 +46,26 @@ router.post('/label-card-in-board/:board', function (req, res, next) {
         switch (act.symbol) {
           case 'mention': {
             trello.post('/cards/' + card.id + '/actions/comments')
-            .send({ text: 'Mentioned at commit [' + commit.id + '](' + commit.url + ').\n>' + commit.message.split('\n').join('\n>') })
+            .send({ text: 'Mentioned by [' + commit.id + '](' + commit.url + ').\n>' + commit.message.split('\n').join('\n>') })
             .end(function (err, res) { console.log(err, res.body); });
           } break;
           case 'fulfill': {
             var labels = _.pluck(card.labels, 'color');
             if (!reverts) {
               trello.post('/cards/' + card.id + '/actions/comments')
-              .send({ text: 'Fulfilled by commit [' + commit.id + '](' + commit.url + ').\n> ' + commit.message.split('\n').join('\n> ') })
-              .end(function (err, res) { console.log(err, res.body); });
+              .send({ text: 'Fulfilled by [' + commit.id + '](' + commit.url + ').\n> ' + commit.message.split('\n').join('\n> ') })
+              .end(function (err) { console.log(err); });
               trello.put('/cards/' + card.id + '/labels')
               .send({ value: _.uniq(labels.concat([ label_success ])).join(',') })
-              .end(function (err, res) { console.log(err, res.body); });
+              .end(function (err) { console.log(err); });
             } else {
+              trello.post('/cards/' + card.id + '/actions/comments')
+              .send({ text: 'Reverted [' + commit.id + '](' + commit.url + ').\n> ' + commit.message.split('\n').join('\n> ') })
+              .end(function (err) { console.log(err); });
               trello.put('/cards/' + card.id + '/labels')
               .send({ value: _.filter(labels, function (v) { return v != label_success; }).join(',') })
-              .end(function (err, res) { console.log(err, res.body); });
+              .end(function (err) { console.log(err); });
             }
-            res
           } break;
         }
       });
