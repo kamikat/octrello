@@ -58,7 +58,13 @@ router.all('/label-card-in-board/:board', function (req, res, next) {
 
     });
 
-  }, next);
+  }, function (err) {
+    if (err) {
+      return res.sendStatus(502);
+    } else {
+      return res.sendStatus(204);
+    }
+  });
 });
 
 module.exports = router;

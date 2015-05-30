@@ -8,6 +8,7 @@ var debug = require('debug');
 var debug_traffic = debug('debug_traffic');
 
 app.use(bodyParser.json());
+
 app.use(function (req, res, next) {
   debug_traffic('%s - %s', req.method, req.url);
   if (req.body) {
@@ -17,10 +18,8 @@ app.use(function (req, res, next) {
   debug_traffic();
   return next();
 });
+
 app.use('/hooks/github-trello', require('./index'));
-app.use(function (req, res, next) {
-  return res.sendStatus(204);
-});
 
 var server = app.listen(process.env.PORT || 8033, function() {
   var host = server.address().address;
