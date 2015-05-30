@@ -19,7 +19,7 @@ app.use(function (req, res, next) {
   return next();
 });
 
-app.use('/hooks/github-trello', require('./index'));
+app.use('/hooks/octrello', require('./index'));
 
 var server = app.listen(process.env.PORT || 8033, function() {
   var host = server.address().address;
