@@ -12,41 +12,37 @@ router.all('/label-card-in-board/:board', function (req, res, next) {
   req.actions =  _(req.body.commits).map(parser.parse).flatten().value();
   return next();
 }, function (req, res, next) {
-  var trello = res.trello;
   async.each(req.actions, function (action, callback) {
 
     var commit = action.commit, revert = action.revert;
     var commit_text = '[' + commit.id + '](' + commit.url + ').\n> ' + commit.message.split('\n').join('\n> ');
 
-    return trello.get('/boards/' + req.params.board + '/cards/' + action.cardId).end(function (err, res) {
+    return req.getCard(req.params.board, action.cardId, function (err, card) {
       if (err) return callback(err);
-
-      var card = res.body;
-      var labels = _.pluck(card.labels, 'color');
 
       switch (action.symbol) {
         case 'mention': {
           if (!revert) {
-            trello.post('/cards/' + card.id + '/actions/comments').send({ text: 'Mentioned by ' + commit_text }).end(callback);
+            res.addCommentToCard(card, 'Mentioned by ' + commit_text, callback);
           }
         } break;
         case 'fulfill': {
           if (!revert) {
             async.parallel({
               comment: function (callback) {
-                trello.post('/cards/' + card.id + '/actions/comments').send({ text: 'Fulfilled by ' + commit_text }).end(callback);
+                res.addCommentToCard(card, 'Fulfilled by ' + commit_text, callback);
               },
               label: function (callback) {
-                trello.put('/cards/' + card.id + '/labels').send({ value: _.union(labels, [ 'green' ]).join(',') }).end(callback);
+                res.addLabelsOnCard(card, [ 'green' ], callback);
               }
             }, callback);
           } else {
             async.parallel({
               comment: function (callback) {
-                trello.post('/cards/' + card.id + '/actions/comments').send({ text: 'Reverted ' + commit_text }).end(callback);
+                res.addCommentToCard(card, 'Reverted ' + commit_text, callback);
               },
               label: function (callback) {
-                trello.put('/cards/' + card.id + '/labels').send({ value: _.difference(labels, [ 'green' ]).join(',') }).end(callback);
+                res.delLabelsOnCard(card, [ 'green' ], callback);
               }
             }, callback);
           }
