@@ -25,8 +25,8 @@ var analyze = (function (symbols) {
     return signals;
   };
 })({
-  'mention': [ 'see' ],
-  'fulfill': [ 'completes?', 'fulfills?', 'implements?' ],
+  'mention': [ 'see', 'refers? to' ],
+  'fulfill': [ 'completes?', 'fulfills?', 'implements?', 'finish(?:es)?' ],
   '_': [ 'and', ', ?' ],
 });
 
