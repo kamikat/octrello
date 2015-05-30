@@ -1,8 +1,11 @@
 {
   "name": "octrello",
   "version": "1.0.0",
-  "description": "Integrate Trello to GitHub.",
+  "description": "Integrate Trello with GitHub.",
   "main": "index.js",
+  "scripts": {
+    "start": "node ./main.js"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/kirisetsz/octrello.git"
