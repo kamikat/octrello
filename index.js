@@ -55,7 +55,11 @@ router.all('/label-card-in-board/:board', function (req, res, next) {
 
   }, function (err) {
     if (err) {
-      return res.sendStatus(502);
+      return res.status(502).send({
+        status: err.status,
+        message: err.message,
+        body: err.response && err.response.body
+      });
     } else {
       return res.sendStatus(204);
     }
