@@ -9,7 +9,9 @@ var trello = require('./lib/trello-agent');
 router.use(trello);
 
 router.all('/label-card-in-board/:board', function (req, res, next) {
-  req.actions =  _(req.body.commits).map(parser.parse).flatten().value();
+  req.actions =  _(req.body.commits).filter(function (commit) {
+    return commit.distinct;
+  }).map(parser.parse).flatten().value();
   return next();
 }, function (req, res, next) {
   async.each(req.actions, function (action, callback) {
