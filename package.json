@@ -1,6 +1,6 @@
 {
   "name": "octrello",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Integrate Trello with GitHub.",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/kirisetsz/octrello.git"
+    "url": "git://github.com/kamikat/octrello.git"
   },
   "keywords": [
     "trello",
@@ -16,10 +16,10 @@
     "webhook",
     "workflow"
   ],
-  "author": "kirisetsz <kirisetsz@gmail.com>",
+  "author": "kamikat <kirisetsz@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kirisetsz/octrello/issues"
+    "url": "https://github.com/kamikat/octrello/issues"
   },
   "dependencies": {
     "async": "^1.0.0",
