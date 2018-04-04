@@ -1,6 +1,6 @@
 {
   "name": "octrello",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Integrate Trello with GitHub.",
   "main": "index.js",
   "scripts": {

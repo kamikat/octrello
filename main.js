@@ -4,22 +4,21 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 
-var debug = require('debug');
-var debug_traffic = debug('debug_traffic');
+var debug = require('debug').debug('trello:webhook');
 
 app.use(bodyParser.json());
 
 app.use(function (req, res, next) {
-  debug_traffic('%s - %s', req.method, req.url);
+  debug('%s - %s', req.method, req.url);
   if (req.body) {
-    debug_traffic('----------------------------------');
-    debug_traffic(JSON.stringify(req.body, null, '  '));
+    debug('----------------------------------');
+    debug(JSON.stringify(req.body, null, '  '));
   }
-  debug_traffic();
+  debug();
   return next();
 });
 
-app.use('/hooks/octrello', require('./index'));
+app.use('/hooks/octrello', require('./lib'));
 
 var server = app.listen(process.env.PORT || 8033, function() {
   var host = server.address().address;
